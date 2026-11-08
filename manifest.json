@@ -1,0 +1,15 @@
+{
+  "name": "Smart Rubber",
+  "short_name": "SmartRubber",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1b5e20",
+  "theme_color": "#1b5e20",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1146/1146869.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
