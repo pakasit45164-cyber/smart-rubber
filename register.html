@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก - Smart Rubber ระบบจัดการสวนยางอัจฉริยะ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Prompt', sans-serif; }
+        .bg-3d-nature {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-3d-nature min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20">
+        
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700 text-3xl mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">สร้างบัญชีผู้ใช้งาน</h1>
+            <p class="text-xs text-gray-500 mt-1">สมัครสมาชิกเพื่อเริ่มต้นใช้งาน Smart Rubber</p>
+        </div>
+
+        <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
+            
+            <!-- อีเมล (เพิ่ม name และ autocomplete="username") -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1.5">อีเมล (Email)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input type="email" id="email" name="email" autocomplete="username" required placeholder="name@example.com" 
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+                </div>
+            </div>
+
+            <!-- เบอร์โทรศัพท์ (เพิ่ม name และ autocomplete="tel") -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1.5">เบอร์โทรศัพท์ (Phone Number)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                        <i class="fa-solid fa-phone"></i>
+                    </span>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel" required placeholder="08X-XXX-XXXX" pattern="[0-9]{10}" title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก"
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+                </div>
+            </div>
+
+            <!-- รหัสผ่าน (เพิ่ม name และ autocomplete="new-password") -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1.5">รหัสผ่าน (Password)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input type="password" id="password" name="password" autocomplete="new-password" required placeholder="อย่างน้อย 6 ตัวอักษร" minlength="6"
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+                </div>
+            </div>
+
+            <div id="alert-msg" class="hidden text-xs p-3 rounded-xl border text-center font-medium"></div>
+
+            <button type="submit" id="register-btn" class="w-full bg-[#1b5e20] text-white py-3.5 rounded-2xl font-medium shadow-md hover:bg-green-700 transition flex items-center justify-center gap-2 text-sm cursor-pointer mt-2">
+                <i class="fa-solid fa-user-check"></i> สมัครสมาชิก
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-xs text-gray-500">
+            <p>มีบัญชีผู้ใช้งานอยู่แล้ว? <a href="index.html" class="text-emerald-700 font-semibold hover:underline">เข้าสู่ระบบที่นี่</a></p>
+        </div>
+
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        async function handleRegister(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const alertBox = document.getElementById('alert-msg');
+            const registerBtn = document.getElementById('register-btn');
+
+            registerBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังสมัครสมาชิก...';
+            registerBtn.disabled = true;
+            alertBox.classList.add('hidden');
+
+            try {
+                const { data, error } = await _supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            phone_number: phone
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+                alertBox.className = "text-xs p-3 rounded-xl border bg-emerald-50 text-emerald-700 border-emerald-100 text-center font-medium mt-4";
+                alertBox.innerText = "สมัครสมาชิกสำเร็จ! กำลังพากลับไปหน้าเข้าสู่ระบบ...";
+                alertBox.classList.remove('hidden');
+
+                // แจ้งเบราว์เซอร์ให้รับทราบการเปลี่ยนรหัสผ่าน/สมัครสมาชิก
+                // ถึงแม้จะใช้ AJAX เบราว์เซอร์ส่วนใหญ่จะตรวจจับจาก autocomplete ได้เลยเมื่อสำเร็จ
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+
+            } catch (err) {
+                console.error("Register Error:", err.message);
+                alertBox.className = "text-xs p-3 rounded-xl border bg-red-50 text-red-600 border-red-100 text-center font-medium mt-4";
+                alertBox.innerText = "เกิดข้อผิดพลาด: " + err.message;
+                alertBox.classList.remove('hidden');
+
+                registerBtn.innerHTML = '<i class="fa-solid fa-user-check"></i> สมัครสมาชิก';
+                registerBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

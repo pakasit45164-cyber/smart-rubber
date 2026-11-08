@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - Smart Rubber ระบบจัดการสวนยางอัจฉริยะ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- ฟอนต์ภาษาไทย -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Prompt', sans-serif; }
+        .bg-3d-nature {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-3d-nature min-h-screen flex items-center justify-center p-4">
+
+    <!-- กล่องฟอร์ม Login แบบ Glassmorphism -->
+    <div class="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20">
+        
+        <!-- ส่วนหัวโลโก้และชื่อระบบ -->
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-700 text-3xl mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-seedling"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">Smart Rubber</h1>
+            <p class="text-xs text-gray-500 mt-1">ระบบจัดการสวนยางอัจฉริยะ ยินดีต้อนรับกลับมา</p>
+        </div>
+
+        <!-- ฟอร์มเข้าสู่ระบบ -->
+        <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+            
+            <!-- ช่องกรอกอีเมล (เพิ่ม autocomplete) -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1.5">อีเมล (Email)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input type="email" id="email" name="email" autocomplete="username" required placeholder="name@example.com" 
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+                </div>
+            </div>
+
+            <!-- ช่องกรอกรหัสผ่าน (เพิ่ม autocomplete) -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1.5">รหัสผ่าน (Password)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••" 
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+                </div>
+            </div>
+
+            <!-- ➕ ปุ่มจำรหัสผ่าน และ ลิงก์ลืมรหัสผ่าน -->
+            <div class="flex items-center justify-between px-1">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="remember-me" class="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 accent-emerald-600">
+                    <span class="text-xs text-gray-600 font-medium">จำรหัสผ่าน</span>
+                </label>
+                <a href="forgot-password.html" class="text-xs text-gray-500 hover:text-emerald-700 hover:underline">ลืมรหัสผ่าน?</a>
+            </div>
+
+            <!-- ข้อความแจ้งเตือน Error (ซ่อนไว้ก่อน) -->
+            <div id="error-msg" class="hidden text-xs text-red-600 bg-red-50 p-3 rounded-xl border border-red-100 text-center font-medium"></div>
+
+            <!-- ปุ่มกดเข้าสู่ระบบ -->
+            <button type="submit" id="login-btn" class="w-full bg-[#1b5e20] text-white py-3.5 rounded-2xl font-medium shadow-md hover:bg-green-700 transition flex items-center justify-center gap-2 text-sm cursor-pointer mt-2">
+                <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
+            </button>
+        </form>
+
+        <!-- ลิงก์ไปหน้าสมัครสมาชิก -->
+        <div class="mt-6 text-center text-xs text-gray-500">
+            <p>ยังไม่มีบัญชีผู้ใช้งาน? <a href="register.html" class="text-emerald-700 font-semibold hover:underline">สมัครสมาชิกที่นี่</a></p>
+        </div>
+
+    </div>
+
+    <!-- Script สำหรับเชื่อมต่อระบบ Auth ของ Supabase -->
+    <script src="supabase-config.js"></script>
+    <script>
+        // 1. ตรวจสอบตอนเปิดหน้าเว็บว่าเคยติ๊กให้จำอีเมลไว้หรือไม่
+        window.onload = () => {
+            const savedEmail = localStorage.getItem('smart_rubber_saved_email');
+            if (savedEmail) {
+                document.getElementById('email').value = savedEmail;
+                document.getElementById('remember-me').checked = true;
+            }
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            const errorBox = document.getElementById('error-msg');
+            const loginBtn = document.getElementById('login-btn');
+
+            // เปลี่ยนสถานะปุ่มกำลังโหลด
+            loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังตรวจสอบ...';
+            loginBtn.disabled = true;
+            errorBox.classList.add('hidden');
+
+            try {
+                // เรียกใช้ฟังก์ชัน Login ของ Supabase Auth
+                const { data, error } = await _supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) throw error;
+
+                if (data.session) {
+                    // 2. จัดการเรื่อง "จำรหัสผ่าน" หากติ๊กไว้ ให้บันทึกอีเมลลง LocalStorage
+                    if (rememberMe) {
+                        localStorage.setItem('smart_rubber_saved_email', email);
+                    } else {
+                        localStorage.removeItem('smart_rubber_saved_email');
+                    }
+
+                    // ล็อกอินสำเร็จ พาไปหน้า dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (err) {
+                console.error("Login Error:", err.message);
+                errorBox.innerText = "อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง";
+                errorBox.classList.remove('hidden');
+                
+                // คืนค่าปุ่มเดิม
+                loginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ';
+                loginBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

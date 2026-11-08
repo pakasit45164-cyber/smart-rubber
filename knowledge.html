@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังความรู้ - Smart Rubber</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Prompt', sans-serif; }
+        /* ธีมพื้นหลัง 3D ธรรมชาติสมจริง */
+        .bg-3d-know {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-3d-know min-h-screen flex flex-col items-center justify-start py-0 md:py-8 pb-24 text-gray-800">
+
+    <div class="w-full max-w-md md:max-w-5xl bg-white/95 backdrop-blur-xl min-h-screen md:min-h-fit md:rounded-3xl relative pb-16 shadow-2xl overflow-hidden border border-white/20">
+        
+        <!-- Header -->
+        <div class="bg-[#1b5e20]/95 backdrop-blur-md text-white p-5 md:px-8 md:py-6 rounded-b-3xl md:rounded-b-none md:rounded-t-3xl flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 backdrop-blur-md p-2.5 rounded-2xl text-white shadow-inner">
+                    <i class="fa-solid fa-tree text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-2xl leading-tight">Smart Rubber</h1>
+                    <p class="text-xs md:text-sm font-light text-emerald-100">คลังความรู้ชาวสวนยาง</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="hidden md:inline-block text-xs bg-emerald-800/80 px-3.5 py-1.5 rounded-full border border-emerald-600/50">สถานะระบบ: ออนไลน์</span>
+                <i class="fa-solid fa-magnifying-glass text-xl cursor-pointer hover:text-emerald-200 transition"></i>
+            </div>
+        </div>
+
+        <div class="p-4 md:p-8 space-y-4 md:space-y-6">
+            
+            <div class="relative">
+                <input type="text" placeholder="ค้นหาบทความ, วิธีรักษาโรค..." class="w-full bg-white/90 border border-gray-200 rounded-2xl p-4 pl-12 text-sm md:text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600">
+                <i class="fa-solid fa-search absolute left-4 top-4.5 text-gray-400 text-lg"></i>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+                
+                <div class="md:col-span-6 space-y-4 md:space-y-6">
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl overflow-hidden shadow-sm border border-gray-100/80">
+                        <div class="bg-gray-200 h-40 md:h-48 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1614018454559-67455d3f2343?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="rubber tree" class="w-full h-full object-cover opacity-90">
+                            <div class="absolute bottom-3 left-3 bg-green-600 text-white text-xs px-2.5 py-1 rounded-lg font-medium">บทความแนะนำ</div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-gray-800 text-base md:text-lg mb-1.5">วิธีรักษาโรคหน้ายางตายนึ่ง (เปลือกแห้ง)</h3>
+                            <p class="text-xs md:text-sm text-gray-500 mb-4 line-clamp-2">สาเหตุหลักมาจากการกรีดหักโหมเกินไป หรือใช้สารเร่งน้ำยางมากเกินขนาด แนวทางแก้ไขเบื้องต้นคือการหยุดพักหน้ายาง...</p>
+                            <button class="text-xs md:text-sm text-[#1b5e20] font-semibold hover:underline cursor-pointer">อ่านต่อ <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-6 space-y-4 md:space-y-6">
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-sm border border-gray-100/80 space-y-3.5">
+                        <h3 class="text-sm md:text-base font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2.5">หมวดหมู่ยอดฮิต</h3>
+                        
+                        <a href="#" class="flex items-center justify-between p-3 hover:bg-gray-50/80 rounded-2xl transition">
+                            <div class="flex items-center gap-3.5">
+                                <div class="bg-blue-50 text-blue-600 w-10 h-10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-droplet"></i>
+                                </div>
+                                <span class="text-sm md:text-base text-gray-700 font-medium">สูตรปุ๋ยบำรุงน้ำยาง</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+                        </a>
+
+                        <a href="#" class="flex items-center justify-between p-3 hover:bg-gray-50/80 rounded-2xl transition">
+                            <div class="flex items-center gap-3.5">
+                                <div class="bg-orange-50 text-orange-600 w-10 h-10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-bug"></i>
+                                </div>
+                                <span class="text-sm md:text-base text-gray-700 font-medium">วิธีกำจัดโรคราดำ/เส้นดำ</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 flex justify-around py-3.5 text-xs text-gray-400 shadow-[0_-5px_15px_rgba(0,0,0,0.08)] z-50">
+        <a href="dashboard.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-house text-xl mb-1"></i>
+            <span>หน้าหลัก</span>
+        </a>
+        <a href="yield.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-chart-line text-xl mb-1"></i>
+            <span>บันทึกผลผลิต</span>
+        </a>
+        <a href="maintenance.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-wrench text-xl mb-1"></i>
+            <span>บำรุงรักษา</span>
+        </a>
+        <a href="knowledge.html" class="flex flex-col items-center text-[#1b5e20] cursor-pointer hover:scale-105 transition">
+            <i class="fa-solid fa-book text-xl mb-1"></i>
+            <span class="font-medium">คลังความรู้</span>
+        </a>
+    </div>
+</body>
+</html>

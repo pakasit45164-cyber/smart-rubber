@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกผลผลิต - Smart Rubber</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js สำหรับวาดกราฟ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ฟอนต์ภาษาไทย -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Prompt', sans-serif; }
+        /* ใช้ภาพพื้นหลังเดียวกับหน้า index.html เป๊ะๆ */
+        .bg-3d-nature {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-3d-nature min-h-screen flex flex-col items-center justify-start py-0 md:py-8 pb-24 text-gray-800">
+
+    <!-- Container หลัก (Glassmorphism โปร่งแสงพรีเมียม) -->
+    <div class="w-full max-w-md md:max-w-5xl bg-white/95 backdrop-blur-xl min-h-screen md:min-h-fit md:rounded-3xl relative pb-16 shadow-2xl overflow-hidden border border-white/20">
+        
+        <!-- Header -->
+        <div class="bg-[#1b5e20]/95 backdrop-blur-md text-white p-5 md:px-8 md:py-6 rounded-b-3xl md:rounded-b-none md:rounded-t-3xl flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 backdrop-blur-md p-2.5 rounded-2xl text-white shadow-inner">
+                    <i class="fa-solid fa-tree text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-2xl leading-tight">Smart Rubber</h1>
+                    <p class="text-xs md:text-sm font-light text-emerald-100">ระบบบันทึกและคำนวณผลผลิต</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="hidden md:inline-block text-xs bg-emerald-800/80 px-3.5 py-1.5 rounded-full border border-emerald-600/50">สถานะระบบ: ออนไลน์</span>
+                <i class="fa-regular fa-bell text-xl cursor-pointer hover:text-emerald-200 transition"></i>
+            </div>
+        </div>
+
+        <!-- เนื้อหาหลัก -->
+        <div class="p-4 md:p-8 space-y-4 md:space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+                
+                <!-- คอลัมน์ซ้าย: ฟอร์มคำนวณ -->
+                <div class="md:col-span-5 space-y-4 md:space-y-6">
+                  
+
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-sm border border-gray-100/80">
+                        <h2 class="text-sm md:text-base font-semibold mb-4 text-gray-800"><i class="fa-solid fa-calculator mr-2 text-green-700"></i>คำนวณและบันทึกรายได้</h2>
+                        
+                        <div class="space-y-3.5">
+                            <div>
+                                <label class="text-xs md:text-sm text-gray-500 mb-1 block">วันที่บันทึกผลผลิต</label>
+                                <input type="date" id="dateInput" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm md:text-base text-gray-800 focus:outline-none focus:border-green-600">
+                            </div>
+                            <div>
+                                <label class="text-xs md:text-sm text-gray-500 mb-1 block">น้ำหนักน้ำยาง (กิโลกรัม)</label>
+                                <input type="number" id="weightInput" placeholder="เช่น 45.2" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm md:text-base text-gray-800 focus:outline-none focus:border-green-600">
+                            </div>
+                            <div>
+                                <label class="text-xs md:text-sm text-gray-500 mb-1 block">ราคายางกลางวันนี้ (บาท/กก.)</label>
+                                <input type="number" id="priceInput" placeholder="เช่น 25" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm md:text-base text-gray-800 focus:outline-none focus:border-green-600">
+                            </div>
+                            
+                            <button onclick="calculateAndShowChart()" class="w-full bg-[#1b5e20] text-white py-3.5 rounded-xl font-medium shadow-md hover:bg-green-700 transition mt-2 cursor-pointer text-sm md:text-base">
+                                คำนวณและบันทึกรายได้
+                            </button>
+
+                            <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 mt-3 text-center">
+                                <p class="text-xs md:text-sm text-gray-500 mb-1">รายได้สุทธิประจำวัน</p>
+                                <h3 class="text-2xl md:text-3xl font-bold text-green-700" id="resultText">0 <span class="text-sm font-normal text-gray-600">บาท</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- คอลัมน์ขวา: กราฟ -->
+                <div class="md:col-span-7 space-y-4 md:space-y-6">
+                    <div id="chartContainer" class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-sm border border-gray-100/80 hidden">
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-sm md:text-base font-semibold text-gray-800"><i class="fa-solid fa-chart-column mr-2 text-green-700"></i>สถิติผลผลิตย้อนหลัง 7 วัน</h2>
+                            <span id="savedDateLabel" class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-lg border border-emerald-200 font-medium"></span>
+                        </div>
+                        <div class="w-full h-64 md:h-72 flex items-center justify-center">
+                            <canvas id="yieldChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="placeholderBox" class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-10 shadow-sm border border-gray-100/80 text-center flex flex-col items-center justify-center h-full min-h-[300px]">
+                        <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-inner">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-gray-800 mb-1">ยังไม่มีข้อมูลการแสดงผลกราฟ</h3>
+                        <p class="text-xs md:text-sm text-gray-400">กรุณากรอกวันที่ น้ำหนัก และราคายาง แล้วกดปุ่ม "คำนวณและบันทึกรายได้" เพื่อดูสถิติ</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 flex justify-around py-3.5 text-xs text-gray-400 shadow-[0_-5px_15px_rgba(0,0,0,0.08)] z-50">
+        <a href="dashboard.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-house text-xl mb-1"></i>
+            <span>หน้าหลัก</span>
+        </a>
+        <a href="yield.html" class="flex flex-col items-center text-[#1b5e20] cursor-pointer hover:scale-105 transition">
+            <i class="fa-solid fa-chart-line text-xl mb-1"></i>
+            <span class="font-medium">บันทึกผลผลิต</span>
+        </a>
+        <a href="maintenance.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-wrench text-xl mb-1"></i>
+            <span>บำรุงรักษา</span>
+        </a>
+        <a href="knowledge.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-book text-xl mb-1"></i>
+            <span>คลังความรู้</span>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+        });
+
+        let yieldChart = null;
+        function calculateAndShowChart() {
+            const dateVal = document.getElementById('dateInput').value;
+            const weight = parseFloat(document.getElementById('weightInput').value);
+            const price = parseFloat(document.getElementById('priceInput').value);
+            
+            if (!dateVal || isNaN(weight) || isNaN(price)) {
+                alert("กรุณากรอกวันที่ น้ำหนัก และราคายางให้ครบถ้วนครับ");
+                return;
+            }
+            
+            document.getElementById('resultText').innerHTML = (weight * price).toLocaleString('th-TH') + ' <span class="text-sm font-normal text-gray-600">บาท</span>';
+            document.getElementById('savedDateLabel').innerText = `บันทึกวันที่: ${dateVal}`;
+            document.getElementById('placeholderBox').classList.add('hidden');
+            document.getElementById('chartContainer').classList.remove('hidden');
+
+            const ctx = document.getElementById('yieldChart').getContext('2d');
+            if (yieldChart) yieldChart.destroy();
+
+            yieldChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ย้อนหลัง 6 วัน', 'ย้อนหลัง 5 วัน', 'ย้อนหลัง 4 วัน', 'ย้อนหลัง 3 วัน', 'เมื่อวาน', 'วันที่เลือก', 'วันนี้'],
+                    datasets: [{
+                        label: 'น้ำหนักยาง (กก.)',
+                        data: [42, 45, 38, 48, 50, 41, weight],
+                        backgroundColor: '#1b5e20',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

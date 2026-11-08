@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บำรุงรักษา - Smart Rubber</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Prompt', sans-serif; }
+        .bg-3d-maint {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-3d-maint min-h-screen flex flex-col items-center justify-start py-0 md:py-8 pb-24 text-gray-800">
+
+    <div class="w-full max-w-md md:max-w-5xl bg-white/95 backdrop-blur-xl min-h-screen md:min-h-fit md:rounded-3xl relative pb-16 shadow-2xl overflow-hidden border border-white/20">
+        
+        <!-- Header -->
+        <div class="bg-[#1b5e20]/95 backdrop-blur-md text-white p-5 md:px-8 md:py-6 rounded-b-3xl md:rounded-b-none md:rounded-t-3xl flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 backdrop-blur-md p-2.5 rounded-2xl text-white shadow-inner">
+                    <i class="fa-solid fa-tree text-xl md:text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-2xl leading-tight">Smart Rubber</h1>
+                    <p class="text-xs md:text-sm font-light text-emerald-100">ระบบช่วยบำรุงรักษาสวนยาง</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="hidden md:inline-block text-xs bg-emerald-800/80 px-3.5 py-1.5 rounded-full border border-emerald-600/50">สถานะระบบ: ออนไลน์</span>
+                <i class="fa-regular fa-bell text-xl cursor-pointer hover:text-emerald-200 transition"></i>
+            </div>
+        </div>
+
+        <div class="p-4 md:p-8 space-y-4 md:space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+                
+                <div class="md:col-span-5 space-y-4 md:space-y-6">
+                    
+                    <!-- การ์ดภาพ 3D ต้นยางและการดูแลหน้ายาง (ตามเรฟ) -->
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl overflow-hidden shadow-sm border border-gray-100/80 p-4 text-center">
+                        <div class="h-44 w-full rounded-2xl overflow-hidden relative shadow-inner mb-3">
+                            <img src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80" alt="Rubber Tree 3D" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
+                                <span class="text-white text-xs font-semibold">ต้นยางของคุณ #B5G-17 (สุขภาพสมบูรณ์)</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-zinc-500">โหมดตรวจเช็กโรคและสารบำรุงผิวเปลือก</p>
+                    </div>
+
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-sm border-l-4 border-orange-500 border border-gray-100/80">
+                        <h2 class="text-sm md:text-base font-bold text-gray-800 flex items-center mb-2">
+                            <i class="fa-solid fa-calendar-check text-orange-500 mr-2"></i>ตารางวันกรีด-วันพัก
+                        </h2>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="text-center">
+                                <p class="text-xs md:text-sm text-gray-500">รูปแบบที่ใช้</p>
+                                <p class="font-semibold text-sm md:text-base text-[#1b5e20]">กรีด 2 วัน พัก 1 วัน</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-100 px-4 py-2.5 rounded-xl text-center">
+                                <p class="text-[10px] md:text-xs text-gray-500">สถานะวันนี้</p>
+                                <p class="font-bold text-orange-600 text-sm md:text-base">วันพักหน้ายาง</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-7 space-y-4 md:space-y-6">
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-sm border border-gray-100/80">
+                        <h2 class="text-sm md:text-base font-semibold mb-3.5 text-gray-800"><i class="fa-brands fa-envira mr-2 text-green-600"></i>รอบบำรุงรักษาประจำปี</h2>
+                        
+                        <div class="space-y-3.5">
+                            <div class="flex items-start gap-3.5 p-3.5 bg-gray-50/90 rounded-2xl border border-gray-100">
+                                <div class="bg-green-100 text-green-700 w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-seedling text-base md:text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm md:text-base font-semibold text-gray-800">ใส่ปุ๋ยบำรุงต้น (ครั้งที่ 1)</p>
+                                    <p class="text-xs md:text-sm text-gray-500 mt-1">แนะนำใส่สูตร 20-8-20 ในช่วงต้นฤดูฝน (พ.ค. - มิ.ย.)</p>
+                                    <div class="mt-2.5 text-[11px] md:text-xs font-medium text-green-700 bg-green-100 px-2.5 py-1 rounded-lg inline-block">
+                                        ความชื้นดินตอนนี้ 72% เหมาะสม
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3.5 p-3.5 bg-gray-50/90 rounded-2xl border border-gray-100">
+                                <div class="bg-blue-100 text-blue-700 w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-bottle-droplet text-base md:text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm md:text-base font-semibold text-gray-800">ทายาป้องกันโรคเส้นดำ</p>
+                                    <p class="text-xs md:text-sm text-gray-500 mt-1">ทาบริเวณหน้ายางที่กรีดหลังฝนตกติดต่อกัน</p>
+                                    <button class="mt-2.5 text-xs md:text-sm bg-white border border-gray-300 text-gray-600 px-3.5 py-1.5 rounded-full hover:bg-gray-100 cursor-pointer">
+                                        ดูวิธีผสมยา
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-red-50 text-red-600 border border-red-200 py-3.5 rounded-2xl font-medium flex items-center justify-center gap-2 hover:bg-red-100 transition cursor-pointer text-sm md:text-base shadow-sm">
+                        <i class="fa-solid fa-triangle-exclamation"></i> แจ้งปัญหาโรคระบาดในสวน
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 flex justify-around py-3.5 text-xs text-gray-400 shadow-[0_-5px_15px_rgba(0,0,0,0.08)] z-50">
+        <a href="dashboard.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-house text-xl mb-1"></i>
+            <span>หน้าหลัก</span>
+        </a>
+        <a href="yield.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-chart-line text-xl mb-1"></i>
+            <span>บันทึกผลผลิต</span>
+        </a>
+        <a href="maintenance.html" class="flex flex-col items-center text-[#1b5e20] cursor-pointer hover:scale-105 transition">
+            <i class="fa-solid fa-wrench text-xl mb-1"></i>
+            <span class="font-medium">บำรุงรักษา</span>
+        </a>
+        <a href="knowledge.html" class="flex flex-col items-center hover:text-[#1b5e20] transition cursor-pointer hover:scale-105">
+            <i class="fa-solid fa-book text-xl mb-1"></i>
+            <span>คลังความรู้</span>
+        </a>
+    </div>
+</body>
+</html>

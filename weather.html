@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#052e16">
+  <title>สภาพอากาศสวนยาง | Smart Rubber</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes alert-blink {
+      0%, 45% { opacity: 1; }
+      50%, 95% { opacity: 0.28; }
+      100% { opacity: 1; }
+    }
+    .blink-alert {
+      animation: alert-blink 1s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-zinc-200 text-black antialiased min-h-screen flex flex-col items-center justify-start py-0 md:py-8 pb-24">
+  <div class="mx-auto flex min-h-screen md:min-h-fit w-full max-w-md md:max-w-3xl flex-col bg-white shadow-2xl md:rounded-3xl overflow-hidden relative pb-12">
+    <header class="bg-black px-6 pb-6 pt-8 text-white md:rounded-t-3xl">
+      <p class="text-xs font-medium uppercase tracking-[0.22em] text-green-400">Smart Rubber</p>
+      <h1 class="mt-2 text-2xl md:text-3xl font-bold leading-tight">สภาพอากาศสวนยาง</h1>
+      <p class="mt-1 text-sm text-zinc-300">กาฬสินธุ์ · เช็กก่อนลงมีด 17:00 น.</p>
+    </header>
+
+    <main class="flex flex-1 flex-col gap-4 px-4 md:px-8 py-5">
+      <section id="loading" class="rounded-3xl bg-zinc-100 px-5 py-8 text-center text-sm text-zinc-600">
+        กำลังดึงข้อมูลอากาศจาก OpenWeatherMap...
+      </section>
+
+      <section id="error" class="hidden rounded-3xl border border-red-200 bg-red-50 px-5 py-5 text-sm leading-relaxed text-red-800"></section>
+
+      <section id="dashboard" class="hidden flex-col gap-4">
+        <article class="rounded-3xl bg-green-800 px-6 py-6 text-white shadow-sm">
+          <p class="text-sm text-green-100">อุณหภูมิปัจจุบัน</p>
+          <p class="mt-1 text-6xl font-bold tracking-tight"><span id="temp">--</span><span class="text-3xl">°C</span></p>
+          <p id="description" class="mt-2 text-sm text-green-100"></p>
+        </article>
+
+        <div class="grid grid-cols-2 gap-3">
+          <article class="rounded-3xl border border-zinc-200 bg-white px-5 py-5 shadow-sm">
+            <p class="text-xs font-medium text-zinc-500">ความชื้นสัมพัทธ์</p>
+            <p class="mt-2 text-3xl font-bold"><span id="humidity">--</span><span class="text-lg">%</span></p>
+          </article>
+          <article class="rounded-3xl border border-zinc-200 bg-white px-5 py-5 shadow-sm">
+            <p class="text-xs font-medium text-zinc-500">โอกาสเกิดฝน</p>
+            <p class="mt-2 text-3xl font-bold"><span id="pop">--</span><span class="text-lg">%</span></p>
+            <p id="pop-time" class="mt-1 text-xs text-zinc-500"></p>
+          </article>
+        </div>
+
+        <div id="alert" class="rounded-3xl px-5 py-5 text-base font-semibold leading-relaxed shadow-sm"></div>
+
+        <button id="refresh" type="button" class="mt-1 min-h-14 rounded-2xl bg-black text-base font-semibold text-white active:bg-zinc-800 cursor-pointer shadow-md">
+          รีเฟรชสภาพอากาศ
+        </button>
+      </section>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md border-t border-zinc-200 grid grid-cols-3 text-center text-xs font-semibold py-3.5 z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.08)]">
+      <a href="index.html" class="text-zinc-500 hover:text-green-800 transition">หน้าแรก</a>
+      <a href="weather.html" class="text-green-800 font-bold">อากาศ</a>
+      <a href="yield.html" class="text-zinc-500 hover:text-green-800 transition">ผลผลิต</a>
+    </nav>
+  </div>
+
+  <script>
+    const YOUR_API_KEY = "e425b5b6f5df9dd7aeaa988371ca06f8";
+    const CITY_QUERY = "Kalasin, Thailand";
+
+    const loadingEl = document.getElementById("loading");
+    const errorEl = document.getElementById("error");
+    const dashboardEl = document.getElementById("dashboard");
+    const alertEl = document.getElementById("alert");
+
+    function bangkokParts(date) {
+      const parts = Object.fromEntries(
+        new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Asia/Bangkok",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hourCycle: "h23",
+        }).formatToParts(date).map((part) => [part.type, part.value])
+      );
+      return {
+        key: parts.year + "-" + parts.month + "-" + parts.day,
+        minutes: Number(parts.hour) * 60 + Number(parts.minute),
+        label: parts.hour + ":" + parts.minute + " น.",
+      };
+    }
+
+    function selectTappingSlot(list) {
+      const todayKey = bangkokParts(new Date()).key;
+      const upcoming = list.filter((item) => item.dt * 1000 >= Date.now() - 30 * 60 * 1000);
+      const poolSource = upcoming.length ? upcoming : list;
+      const today = poolSource.filter((item) => bangkokParts(new Date(item.dt * 1000)).key === todayKey);
+      const pool = today.length ? today : poolSource;
+      return pool.reduce((best, item) => {
+        const distance = Math.abs(bangkokParts(new Date(item.dt * 1000)).minutes - 17 * 60);
+        if (!best || distance < best.distance) {
+          return { item, distance };
+        }
+        return best;
+      }, null);
+    }
+
+    function showError(message) {
+      loadingEl.classList.add("hidden");
+      dashboardEl.classList.add("hidden");
+      errorEl.textContent = message;
+      errorEl.classList.remove("hidden");
+    }
+
+    function renderAlert(popPercent) {
+      alertEl.className = "rounded-3xl px-5 py-5 text-base font-semibold leading-relaxed shadow-sm";
+      if (popPercent > 50) {
+        alertEl.classList.add("blink-alert", "bg-red-600", "text-white");
+        alertEl.textContent = "🔴 ระวัง! มีแนวโน้มฝนตก เสี่ยงน้ำยางถูกชะล้าง";
+        return;
+      }
+      alertEl.classList.add("bg-green-600", "text-white");
+      alertEl.textContent = "🟢 สภาพอากาศปลอดภัย";
+    }
+
+    async function loadWeather() {
+      loadingEl.classList.remove("hidden");
+      errorEl.classList.add("hidden");
+
+      if (!YOUR_API_KEY || YOUR_API_KEY === "YOUR_API_KEY") {
+        showError("ใส่ API key ของ OpenWeatherMap ในตัวแปร YOUR_API_KEY ด้านบนของสคริปต์ แล้วรีเฟรชหน้านี้");
+        return;
+      }
+
+      const query = new URLSearchParams({
+        q: CITY_QUERY,
+        units: "metric",
+        lang: "th",
+        appid: YOUR_API_KEY,
+      });
+
+      try {
+        const [currentResponse, forecastResponse] = await Promise.all([
+          fetch("https://api.openweathermap.org/data/2.5/weather?" + query.toString()),
+          fetch("https://api.openweathermap.org/data/2.5/forecast?" + query.toString()),
+        ]);
+
+        const current = await currentResponse.json();
+        const forecast = await forecastResponse.json();
+
+        if (current.cod === 401 || forecast.cod === "401") {
+          throw new Error("OpenWeatherMap ยังไม่รับคีย์นี้ คีย์ที่เพิ่งสร้างมักใช้ได้หลังรอประมาณ 2 ชั่วโมง หรือตรวจว่าคัดลอกครบ");
+        }
+        if (!currentResponse.ok) {
+          throw new Error(current.message || "ดึงข้อมูลอากาศปัจจุบันไม่สำเร็จ");
+        }
+        if (!forecastResponse.ok || !Array.isArray(forecast.list) || forecast.list.length === 0) {
+          throw new Error(forecast.message || "ดึงโอกาสเกิดฝนไม่สำเร็จ");
+        }
+
+        const slot = selectTappingSlot(forecast.list);
+        const popPercent = Math.round(Number(slot.item.pop) * 100);
+        const when = bangkokParts(new Date(slot.item.dt * 1000));
+
+        document.getElementById("temp").textContent = Math.round(current.main.temp);
+        document.getElementById("humidity").textContent = Math.round(current.main.humidity);
+        document.getElementById("pop").textContent = popPercent;
+        document.getElementById("description").textContent = current.weather?.[0]?.description || "กาฬสินธุ์";
+        document.getElementById("pop-time").textContent = "ช่วงใกล้ 17:00 · " + when.label;
+        renderAlert(popPercent);
+
+        loadingEl.classList.add("hidden");
+        dashboardEl.classList.remove("hidden");
+        dashboardEl.classList.add("flex");
+      } catch (error) {
+        showError(error.message || "เชื่อมต่อ OpenWeatherMap ไม่สำเร็จ");
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", loadWeather);
+    loadWeather();
+  </script>
+</body>
+</html>
